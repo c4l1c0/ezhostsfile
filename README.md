@@ -3,15 +3,19 @@ This program is used to unblock sites by adding their ip and url to /etc/hosts f
 
 **Currently only works in Linux OSes**
 
-**This needs permission to write to hosts**
+**This needs permission to write to /etc/hosts**
+
+## Dependencies
+* make
+* gcc
+* libcurl
 
 ## Compilation
 ```
-cd src
-gcc -o ezhostsfile -lcurl main.c include/file/appendtofile.c include/curl/getip.c
+make
 ```
 
 ## Usage
 ```
-ezhostsfile *url*
+ezhostsfile [options] <url>
 ```
