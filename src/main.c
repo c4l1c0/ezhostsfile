@@ -11,6 +11,6 @@ int main(int argc, char **argv){
 	strcat(stringtoappend, ip);
 	strcat(stringtoappend, " ");
 	strcat(stringtoappend, argv[1]);
-	appendtofile("/etc/hosts", stringtoappend);
+	if(appendtofile("/etc/hosts", stringtoappend) == 0) printf("Entry added successfully\n");
 	return 0;
 }
