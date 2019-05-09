@@ -10,6 +10,7 @@ void printhelp(){
 
 		printf("Options:\n");
 		printf("-h\t	:Display this message and exit.\n\n");
+		printf("-q <key>\t	:Search for entry by supplying key to search.\n\n");
 
 		printf("For reporting bugs or requesting features, please visit:\n");
 		printf("<https://github.com/rezaarifandee/ezhostsfile>\n");
@@ -18,6 +19,7 @@ void printhelp(){
 
 int main(int argc, char **argv){
 	int helpflag=0;
+	int searchflag=0;
 
 	if(argc==1){
 		printhelp();
@@ -27,6 +29,10 @@ int main(int argc, char **argv){
 			if(strcmp(argv[i],"-h")==0){
 				helpflag=1;
 				break;
+			}
+			else if(strcmp(argv[i],"-q")==0){
+				search("hosts", argv[i+1]);
+				return 0;
 			}
 		}
 
