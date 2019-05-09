@@ -2,12 +2,14 @@
 #include<string.h>
 #include"include/curl/getip.h"
 #include"include/file/appendhosts.h"
+#include"include/file/search.h"
+#include"include/file/deleteline.h"
 
 void printhelp(){
-		printf("Usage: [options] url\n\n");
+		printf("Usage: [options] <url>\n\n");
 
 		printf("Options:\n");
-		printf("-h\t	Display this message and exit.\n\n");
+		printf("-h\t	:Display this message and exit.\n\n");
 
 		printf("For reporting bugs or requesting features, please visit:\n");
 		printf("<https://github.com/rezaarifandee/ezhostsfile>\n");
