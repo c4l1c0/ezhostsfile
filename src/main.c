@@ -5,6 +5,9 @@
 #include"include/file/search.h"
 #include"include/file/deleteline.h"
 
+#define LINUX_HOSTS_PATH "/etc/hosts"
+#define WINDOWS_HOSTS PATH "C:\\Windows\\System32\\drivers\\etc\\hosts"
+
 void printhelp(){
 		printf("Usage: [options] <url>\n\n");
 
@@ -31,21 +34,27 @@ int main(int argc, char **argv){
 				break;
 			}
 			else if(strcmp(argv[i],"-q")==0){
-				search("hosts", argv[i+1]);
+				search(LINUX_HOSTS_PATH, argv[i+1]);
 				return 0;
 			}
 		}
 
 		if(helpflag) printhelp();
 		else{
-			printf("%s\n", argv[1]);
+			printf("url:\t%s\n", argv[1]);
 			char *ip = getip(argv[1]); //get ip from api
-			char *stringtoappend=malloc(strlen(ip) + 2 + strlen(argv[1]));
-			stringtoappend[0] = '\0';
-			strcat(stringtoappend, ip);
-			strcat(stringtoappend, " ");
-			strcat(stringtoappend, argv[1]);
-			if(appendtofile("/etc/hosts", stringtoappend) == 0) printf("Entry added successfully\n");
+			if(ip!=NULL){
+				printf("ip:\t%s\n", ip);
+				char *stringtoappend=malloc(strlen(ip) + 2 + strlen(argv[1]));
+				stringtoappend[0] = '\0';
+				strcat(stringtoappend, ip);
+				strcat(stringtoappend, " ");
+				strcat(stringtoappend, argv[1]);
+				if(appendtofile(LINUX_HOSTS_PATH, stringtoappend) == 0) printf("\nSUCCESS: Entry added successfully\n");
+			}
+			else{
+				printf("\nERROR: Failed to add entry\n");
+			}
 		}
 	}
 	return 0;

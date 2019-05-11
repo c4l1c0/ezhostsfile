@@ -24,15 +24,17 @@ char * getip(char *url){
 
 	char *url_for_api;
 	char *ip;
+	char fail[5] = "fail";
 	
 	struct string chunk;
 	chunk.len = 0;
 	chunk.str = malloc(1);
 
-	if((url_for_api = malloc( strlen("http://ip-api.com/line/") + strlen(url) + 1)) != NULL ){
+	if((url_for_api = malloc( strlen("http://ip-api.com/line/") + strlen(url) + 20 + 1)) != NULL ){
 		url_for_api[0] = '\0';
 		strcat(url_for_api, "http://ip-api.com/line/");
 		strcat(url_for_api, url);
+		strcat(url_for_api, "?fields=status,query");
 	}
 
 	curl = curl_easy_init();
@@ -53,6 +55,7 @@ char * getip(char *url){
 		else {
 			int i;
 			bool lastline = 0;
+
 			for(i=chunk.len-1; i>=0;i--){
 				if(chunk.str[i]=='\n' && lastline==1) break;
 				else lastline=1;
@@ -71,9 +74,21 @@ char * getip(char *url){
 		curl_global_cleanup();
 		return NULL;
 	}
-	curl_easy_cleanup(curl);
-	free(chunk.str);
-	free(url_for_api);
-	curl_global_cleanup();
-	return ip;
+
+	if(strncmp(chunk.str, fail,3)==0){
+		fprintf(stderr, "API returns: \"status: failed\"\n");
+		curl_easy_cleanup(curl);
+		free(chunk.str);
+		free(url_for_api);
+		curl_global_cleanup();
+		return NULL;
+	}
+
+	else{
+		curl_easy_cleanup(curl);
+		free(chunk.str);
+		free(url_for_api);
+		curl_global_cleanup();
+		return ip;
+	}
 }
