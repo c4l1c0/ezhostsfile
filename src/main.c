@@ -13,7 +13,8 @@ void printhelp(){
 		printf("Usage: [options] <url>\n\n");
 
 		printf("Options:\n");
-		printf("-h\t\t		:Display this message and exit.\n\n");
+		printf("-h\t\t		:Display this message and exit.\n");
+		printf("-o <path>\t	:Choose target hosts file.\n"
 		printf("-q <key>\t	:Search for entry by supplying key to search.\n");
 		printf("-r <key>\t	:Remove entry by searching for key.\n\n");
 
@@ -26,6 +27,7 @@ int main(int argc, char **argv){
 	bool helpflag=0;
 	int searchflag=0;
 	int deletelineflag=0;
+	char *target=LINUX_HOSTS_PATH;
 
 	if(argc==1){
 		printhelp();
@@ -42,6 +44,9 @@ int main(int argc, char **argv){
 			else if(strcmp(argv[i],"-r")==0){
 				deletelineflag=i;
 			}
+			else if(strcmp(argv[i],"-o")==0){
+				target = argv[i+1];
+			}
 			else if(argv[i][0] == '-'){
 				helpflag=1;
 			}
@@ -56,7 +61,7 @@ int main(int argc, char **argv){
 				else{
 					int *matches=malloc(1);
 					if(strcmp(argv[searchflag+1],"-r")==0 || deletelineflag>0){
-						int matcheslen=search(LINUX_HOSTS_PATH, argv[deletelineflag+1], &matches);
+						int matcheslen=search(target, argv[deletelineflag+1], &matches);
 						if(matcheslen>0){
 							int selection;
 							printf("Select entry to remove. [1...%d]: ", matcheslen);
@@ -67,19 +72,21 @@ int main(int argc, char **argv){
 								scanf("%d", &selection);
 							}
 							selection--;
-							if(deleteline(LINUX_HOSTS_PATH, matches[selection])==0) printf("\nSUCCESS: Entry removed.\n");
+							if(deleteline(target, matches[selection])==0){
+								printf("\nSUCCESS: Entry removed.\n");
+							}
 							else printf("\nERROR: Failed to remove entry.\n");
 						}
 					}
 					else{
-						search(LINUX_HOSTS_PATH, argv[searchflag+1], &matches);
+						search(target, argv[searchflag+1], &matches);
 					}
 				}
 				return 0;
 		}
 		else{
-			printf("url:\t%s\n", argv[1]);
-			char *ip = getip(argv[1]); //get ip from api
+			printf("url:\t%s\n", argv[argc-1]);
+			char *ip = getip(argv[argc-1]); //get ip from api
 			if(ip!=NULL){
 				printf("ip:\t%s\n", ip);
 				char *stringtoappend=malloc(strlen(ip) + 2 + strlen(argv[1]));
@@ -87,7 +94,7 @@ int main(int argc, char **argv){
 				strcat(stringtoappend, ip);
 				strcat(stringtoappend, " ");
 				strcat(stringtoappend, argv[1]);
-				if(appendtofile(LINUX_HOSTS_PATH, stringtoappend) == 0) printf("\nSUCCESS: Entry added successfully.\n");
+				if(appendtofile(target, stringtoappend) == 0) printf("\nSUCCESS: Entry added successfully.\n");
 			}
 			else{
 				printf("\nERROR: Failed to add entry\n");
