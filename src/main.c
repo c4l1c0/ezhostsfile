@@ -34,7 +34,12 @@ int main(int argc, char **argv){
 				break;
 			}
 			else if(strcmp(argv[i],"-q")==0){
-				search(LINUX_HOSTS_PATH, argv[i+1]);
+				if(argv[i+1] == NULL){
+					printf("ERROR: no search term specified.\n");
+				}
+				else{
+					search(LINUX_HOSTS_PATH, argv[i+1]);
+				}
 				return 0;
 			}
 		}
