@@ -17,8 +17,6 @@ int deleteline(char *path, int line){
 	file = fopen(path, "r");
 	tmpfile = fopen(tmppath, "w+");
 
-	printf("%s\n", tmpfile);
-
 	if(file==NULL){
 		if(errno == EACCES) printf("Error opening file: %s\n", strerror(errno));
 		return -1;
@@ -39,6 +37,7 @@ int deleteline(char *path, int line){
 	fclose(file);
 	fclose(tmpfile);
 
+	remove(path);
 	rename(tmppath, path);
 
 	return 0;
