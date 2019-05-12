@@ -14,7 +14,7 @@ void printhelp(){
 
 		printf("Options:\n");
 		printf("-h\t\t		:Display this message and exit.\n");
-		printf("-o <path>\t	:Choose target hosts file.\n"
+		printf("-o <path>\t	:Choose target hosts file.\n");
 		printf("-q <key>\t	:Search for entry by supplying key to search.\n");
 		printf("-r <key>\t	:Remove entry by searching for key.\n\n");
 
